@@ -27,7 +27,7 @@ def predict(image_path, model, top_k):
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('image_path')
 parser.add_argument('model')
-parser.add_argument('--top_k', type=int, default=5)
+parser.add_argument('--top_k', type=int, default=1)
 parser.add_argument('--category_names')
 args = parser.parse_args()
 
@@ -44,12 +44,19 @@ if args.category_names is not None:
     with open(args.category_names, 'r') as f:
         class_names = json.load(f)
         # print the resuls
-        for k in range(classes.size):
-            print("Class:", class_names[classes[k]], "Probability:", probs[k]) 
+        if args.top_k > 1:
+            for k in range(classes.size):
+                print("Class:", class_names[classes[k]], "Probability:", probs[k]) 
+        else:
+            print("Class:", class_names[str(classes)], "Probability:", probs) 
 
 else:
     # print the resuls
-    for k in range(classes.size):
-        print("Class:", classes[k], "Probability:", probs[k]) 
+    if args.top_k > 1:
+        for k in range(classes.size):
+            print("Class:", classes[k], "Probability:", probs[k])         
+    else:
+        print("Class:", classes, "Probability:", probs) 
+
 
         
